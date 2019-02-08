@@ -123,7 +123,12 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="Source1.cpp" />
+    <ClCompile Include="CannyWebcam.cpp" />
+    <ClCompile Include="Ejemplo.cpp" />
+    <ClCompile Include="grayscale.cpp" />
+    <ClCompile Include="Openimage.cpp" />
+    <ClCompile Include="RGB.cpp" />
+    <ClCompile Include="Histograma.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
