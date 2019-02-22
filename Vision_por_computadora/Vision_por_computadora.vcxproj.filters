@@ -15,7 +15,7 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="FiltroPotencia.cpp">
+    <ClCompile Include="FiltroRango.cpp">
       <Filter>Archivos de origen</Filter>
     </ClCompile>
   </ItemGroup>
