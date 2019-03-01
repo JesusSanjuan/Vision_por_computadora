@@ -25,11 +25,14 @@ int main(int, char**)
 
 	//Create trackbar to change brightness
 	int iSliderValue1 = 255;
-	createTrackbar("Brightness", "grayscale", &iSliderValue1, 255);
+	createTrackbar("Rango 1", "grayscale", &iSliderValue1, 255);
 
 	//Create trackbar to change contrast
 	int iSliderValue2 = 255;
-	createTrackbar("Contrast", "grayscale", &iSliderValue2,255);
+	createTrackbar("Rango 2", "grayscale", &iSliderValue2,255);
+
+	int iSliderValue3 = 255;
+	createTrackbar("Valor de cambio", "grayscale", &iSliderValue3, 255);
 
 
 	for (;;)
@@ -53,17 +56,11 @@ int main(int, char**)
 				
 				if (intensidad >= rango1 && intensidad <= rango2)
 				{
-					grayscale.at<uchar>(y, x) = 255;
+					grayscale.at<uchar>(y, x) = iSliderValue3;
 				}
 
 			}
-		}
-
-
-		//grayscale.convertTo(grayscale, -1, dContrast, iBrightness);
-
-		
-		
+		}		
 		imshow("grayscale", grayscale);
 
 		waitKey(30);
