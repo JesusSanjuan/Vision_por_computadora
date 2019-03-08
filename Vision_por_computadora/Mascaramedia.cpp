@@ -6,51 +6,45 @@ using namespace cv;
 
 int main(int, char**)
 {
-	VideoCapture cap(0); //Abrimos la camara default
-	if (!cap.isOpened()) //checamos si fue exitoso
-		return -1;
 
-	namedWindow("Imagen", 1);
+	namedWindow("Color", 1);
+	namedWindow("Grises", 1);
 	namedWindow("Mascara", 1);
+	
 
-	Mat frame;
-	cap >> frame; 
-
-	Mat original = Mat(frame.rows, frame.cols, CV_8U);
-	Mat suavisada = Mat(frame.rows, frame.cols, CV_8U);
+	Mat color = imread("image3.jpg");	
+	Mat gris = Mat(color.rows, color.cols, CV_8U);
+	Mat suavisada = Mat(color.rows, color.cols, CV_8U);
 
 	
 
 	for (;;)
 	{
-		Mat frame;
-		cap >> frame; 
-		
-		cvtColor(frame, original, CV_RGB2GRAY);
-		suavisada = original;
-		//std::cout << "Barra 1: " << iSliderValue1 <<std::endl;		
+		cvtColor(color, gris, CV_RGB2GRAY);
+		suavisada = gris;	
 
-			
-
-		for (int x = 1; x < original.cols-1; x++) // Control de ventana
+		for (int x = 1; x < gris.cols-1; x++) // Control de ventana
 		{
-			for (int y = 1; y < original.rows-1; y++) // Control de ventana
+			for (int y = 1; y < gris.rows-1; y++) // Control de ventana
 			{
-				int sumatoria = 0;
-				for (int xx = x-1; xx < x+1; xx++)
+				int sumatoria = 0;				
+				for (int xx = x-1; xx <x+1; xx++)
 				{
 					for (int yy = y-1; yy < y+1; yy++)
 					{
-						int intensidad = original.at<uchar>(yy, xx);
+						int intensidad = gris.at<uchar>(yy, xx);
+						//std::cout << "Intensidades " << intensidad  << std::endl;
 						sumatoria = sumatoria + intensidad;
 					}
 				}
-				suavisada.at<uchar>(y, x) = sumatoria;						
+				//std::cout << "Sumatorios " << (sumatoria/9) << std::endl;
+				suavisada.at<uchar>(y, x) = (sumatoria/9);						
 			}
-		}		
-		imshow("Imagen", original);
-	imshow("Mascara", suavisada);
+		}	
 
+		imshow("Color", color);
+		imshow("Grises", gris);
+		imshow("Mascara", suavisada);
 		waitKey(30);
 	}
 	return 0;
