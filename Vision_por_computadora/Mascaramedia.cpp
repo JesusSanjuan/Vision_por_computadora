@@ -12,11 +12,9 @@ int main(int, char**)
 	namedWindow("Mascara", 1);
 	
 
-	Mat color = imread("image3.jpg");	
+	Mat color = imread("image2.jpg");	
 	Mat gris = Mat(color.rows, color.cols, CV_8U);
-	Mat suavisada = Mat(color.rows, color.cols, CV_8U);
-
-	
+	Mat suavisada = Mat(color.rows, color.cols, CV_8U);	
 
 	for (;;)
 	{
@@ -27,10 +25,10 @@ int main(int, char**)
 		{
 			for (int y = 1; y < gris.rows-1; y++) // Control de ventana
 			{
-				int sumatoria = 0;				
-				for (int xx = x-1; xx <x+1; xx++)
+				int sumatoria = 0;	
+				for (int xx = x-1; xx <= x+1; xx++)
 				{
-					for (int yy = y-1; yy < y+1; yy++)
+					for (int yy = y-1; yy <= y+1; yy++)
 					{
 						int intensidad = gris.at<uchar>(yy, xx);
 						//std::cout << "Intensidades " << intensidad  << std::endl;
@@ -38,10 +36,11 @@ int main(int, char**)
 					}
 				}
 				//std::cout << "Sumatorios " << (sumatoria/9) << std::endl;
+				int tem = gris.at<uchar>(y, x);
+				std::cout << "Valor viejo: " << tem << "      Valor promediado: " << sumatoria / 9 <<std::endl;
 				suavisada.at<uchar>(y, x) = (sumatoria/9);						
 			}
 		}	
-
 		imshow("Color", color);
 		imshow("Grises", gris);
 		imshow("Mascara", suavisada);
