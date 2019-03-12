@@ -37,7 +37,7 @@ int main(int, char**)
 				}
 				//std::cout << "Sumatorios " << (sumatoria/9) << std::endl;
 				int tem = gris.at<uchar>(y, x);
-				std::cout << "Valor viejo: " << tem << "      Valor promediado: " << sumatoria / 9 <<std::endl;
+				//std::cout << "Valor viejo: " << tem << "      Valor promediado: " << sumatoria / 9 <<std::endl;
 				suavisada.at<uchar>(y, x) = (sumatoria/9);						
 			}
 		}	
