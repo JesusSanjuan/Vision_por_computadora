@@ -15,7 +15,7 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Deteccionbordesvideos.cpp">
+    <ClCompile Include="FiltroGradiente.cpp">
       <Filter>Archivos de origen</Filter>
     </ClCompile>
   </ItemGroup>
