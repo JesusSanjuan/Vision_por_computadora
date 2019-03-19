@@ -15,7 +15,7 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="FiltroGradiente.cpp">
+    <ClCompile Include="FiltroFurier.cpp">
       <Filter>Archivos de origen</Filter>
     </ClCompile>
   </ItemGroup>
