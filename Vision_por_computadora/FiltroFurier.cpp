@@ -74,7 +74,6 @@ int main(int, char**)
 
 			double cuadrados = pow(ResX, 2.0) + pow(ResY, 2.0);
 			DFT.at<double>(y, x) = sqrt(cuadrados);
-			//DFT.at<double>(x, y) = abs(ResX) + abs(ResY);
 
 		}
 	}
