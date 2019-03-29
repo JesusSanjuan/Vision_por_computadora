@@ -14,13 +14,15 @@ int main(int, char**)
 	
 
 
-	Mat modificada = cv::imread("image0.jpg");
+	Mat modificada = cv::imread("unnamed2.jpg");
 	cv::cvtColor(modificada, modificada, CV_BGR2GRAY);
 	Mat original = modificada.clone();
 
 	int M = original.cols;//width
 	int N = original.rows;//high
 	printf("imagen tamaño width: %d  y high: %d \n", M, N);
+
+
 	//paso 1:f(x,y)*(-1)^(x+y)
 	for (int x = 0; x < M; x++)
 	{
@@ -78,7 +80,43 @@ int main(int, char**)
 		}
 	}
 
+	//Creacion de mascara
+
 	printf("Termino Conversion de Tranformada de Furier");
+	Mat mascaraCilindrica = Mat(N, M, CV_64F);
+	int DUV;
+	int D0 = 20;
+	for (int u = 0; u < M; u++)
+	{
+		for (int v = 0; v < N; v++)
+		{
+			DUV = sqrt(pow(u - (M / 2), 2) + pow(v - (N / 2), 2));
+			if (DUV <= D0)
+			{
+				mascaraCilindrica.at<double>(v, u) = 1;
+			}
+			else
+			{
+				mascaraCilindrica.at<double>(v, u) = 0;
+			}
+		}
+	}
+	
+	//Creacion de mascara
+    for (int x = 0; x < M; x++)
+	{
+		for (int y = 0; y < N; y++)
+		{
+			double intensidad = DFTImageRE.at<double>(y, x);
+			double intensidad2 = mascaraCilindrica.at<double>(y, x);
+			double intensidad3 = DFTImageIM.at<double>(y, x);
+			double valor1 = intensidad  * intensidad2;
+			double valor2 = intensidad3 * intensidad2;
+			DFTImageRE.at<double>(y, x) = valor1;
+			DFTImageIM.at<double>(y, x) = valor2;
+		}
+	}
+	
 	//Paso 3: Aplicamos la inversa
 	for (int x = 0; x < M; x++)
 	{
@@ -129,6 +167,7 @@ int main(int, char**)
 	imshow("Original", original);
 	imshow("Modificada", modificada);
 	imshow("Modificada2", modificada2);
+	imshow("Mascara", mascaraCilindrica);
 	imshow("DFT", DFT);
 	//imshow("DFTImageRE", DFTImageRE);
 	//imshow("DFTImageIM", DFTImageIM);
