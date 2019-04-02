@@ -10,13 +10,11 @@ using namespace cv;
 
 int main(int, char**)
 {
-
-	
-
-
-	Mat modificada = cv::imread("image00.jpg");
+	Mat modificada = cv::imread("unnamed2.jpg");	
 	cv::cvtColor(modificada, modificada, CV_BGR2GRAY);
 	Mat original = modificada.clone();
+	modificada.convertTo(modificada, CV_64F);
+	
 
 	int M = original.cols;//width
 	int N = original.rows;//high
@@ -28,13 +26,13 @@ int main(int, char**)
 	{
 		for (int y = 0; y < N; y++)
 		{
-			modificada.at<uchar>(y, x) = original.at<uchar>(y, x)*pow(-1.0, (double)x + y);
+			modificada.at<double>(y, x) = modificada.at<double>(y, x)*pow(-1.0, (double)x + y);
 		}
 	}
 	
 	Mat modificada2;
 	modificada.convertTo(modificada2, CV_64F);
-
+	// Mat modificada2= modificada.clone();
 	Mat DFT = modificada2.clone();
 	Mat DFTImageRE = modificada2.clone();
 	Mat DFTImageIM = modificada2.clone();
@@ -80,7 +78,7 @@ int main(int, char**)
 		}
 	}
 
-	//Creacion de mascara
+/*	//Creacion de mascara
 	printf("Termino Conversion de Tranformada de Furier");
 	Mat mascaraCilindrica = Mat(N, M, CV_64F);
 	int DUV;
@@ -114,7 +112,7 @@ int main(int, char**)
 			DFTImageRE.at<double>(y, x) = valor1;
 			DFTImageIM.at<double>(y, x) = valor2;
 		}
-	}
+	}*/
 	//Paso 3: Aplicamos la inversa
 	for (int x = 0; x < M; x++)
 	{
@@ -145,9 +143,10 @@ int main(int, char**)
 				}
 			}			
 			double sumReal = akR - bkI;
-			double sumImag = bkR + akI;
+			//double sumImag = bkR + akI;
 
-			DFTInverse.at<double>(y, x) = abs(sumReal) + abs(sumImag);
+			//DFTInverse.at<double>(y, x) = abs(sumReal)+ abs(sumImag);
+			DFTInverse.at<double>(y, x) = abs(sumReal) ;
 		}
 	}
 
@@ -164,7 +163,7 @@ int main(int, char**)
 	imshow("Original", original);
 	imshow("Modificada", modificada);
 	imshow("Modificada2", modificada2);
-	imshow("Mascara", mascaraCilindrica);
+	//imshow("Mascara", mascaraCilindrica);
 	imshow("DFT", DFT);
 	//imshow("DFTImageRE", DFTImageRE);
 	//imshow("DFTImageIM", DFTImageIM);
