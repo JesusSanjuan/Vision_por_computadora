@@ -28,7 +28,7 @@ int main(int, char**)
 	{
 		for (int y = 0; y < N; y++)
 		{
-			modificada.at<double>(y, x) = original.at<double>(y, x)*pow(-1.0, (double)x + y);
+			modificada.at<uchar>(y, x) = original.at<uchar>(y, x)*pow(-1.0, (double)x + y);
 		}
 	}
 	
@@ -39,7 +39,7 @@ int main(int, char**)
 	Mat DFTImageRE = modificada2.clone();
 	Mat DFTImageIM = modificada2.clone();
 	Mat DFTInverse = Mat(modificada2.rows, modificada2.cols, CV_64F, Scalar(0));
-	Mat salida = Mat(modificada2.rows, modificada2.cols, CV_64F);
+	Mat salida = Mat(modificada2.rows, modificada2.cols, CV_8U);
 
 	//Paso 2: Aplicamos la transformada
 
@@ -157,7 +157,7 @@ int main(int, char**)
 	{
 		for (int y = 0; y < DFTInverse.rows; y++)
 		{
-			salida.at<double>(y, x) = (salida.at<double>(y, x)*pow(-1.0, (double)x + y));
+			salida.at<uchar>(y, x) = (salida.at<uchar>(y, x)*pow(-1.0, (double)x + y));
 		}
 	}
 
