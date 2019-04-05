@@ -30,19 +30,23 @@ int main(int, char**)
 		for (int y = 0; y < N; y++)
 		{
 			modificada.at<double>(y, x) = modificada.at<double>(y, x)*pow(-1.0, (double)(x +y));
+			if (x == 0 && y == 0)
+			{
+				printf("1 %f\n ", modificada.at<double>(y, x));
+			}
 			//printf(" %f\n ", modificada.at<double>(y, x));
 		}
 	}
-	
+	printf("Concluye paso1 \n");
 	
 	//modificada.convertTo(modificada2, CV_64F);
 	// Mat modificada2= modificada.clone();
 	Mat DFT = modificada.clone();
 	Mat DFTImageRE = modificada.clone();
 	Mat DFTImageIM = modificada.clone();
-	Mat DFTInverse = Mat(modificada.rows, modificada.cols, CV_64F, Scalar(0));
+	Mat DFTInverse = Mat(modificada.rows, modificada.cols, CV_64F);
 	Mat salida = Mat(modificada.rows, modificada.cols, CV_64F);
-	Mat salida2 = Mat(modificada.rows, modificada.cols, CV_8U);
+	Mat salida2 = Mat(modificada.rows, modificada.cols, CV_64F);
 	//Paso 2: Aplicamos la transformada
 
 	for (int x = 0; x < M; x++)
@@ -81,7 +85,7 @@ int main(int, char**)
 
 		}
 	}
-	printf("Termino Conversion de Tranformada de Furier");
+	printf("Termino Conversion de Tranformada de Furier\n");
 	/*
 //Creacion de mascara cilindrica
 	
@@ -116,7 +120,8 @@ int main(int, char**)
 			
 		}
 	}
-	
+	printf("Creacion de mascara terminada\n");
+
 	/*//Aplicacion de mascara
     for (int x = 0; x < M; x++)
 	{
@@ -159,12 +164,17 @@ int main(int, char**)
 					akI += DFTImageIM.at<double>(k, j)*cos(equiz + ye);
 					bkI += DFTImageIM.at<double>(k, j)*(1.0)*sin(equiz + ye);
 				}
-			}			
-			double sumReal = akR - bkI;
-			//double sumImag = bkR - akI;
+			}
 
-			//DFTInverse.at<double>(y, x) = abs(sumReal)+abs(sumImag);
-			DFTInverse.at<double>(y, x) = abs(sumReal) ;
+
+			double sumReal = akR - bkI;
+			//double sumImag = bkR+akI;
+			//DFTInverse.at<double>(y, x) = abs(sumReal) + abs(sumImag);
+			DFTInverse.at<double>(y, x) = (sumReal);
+			//DFTInverse.at<double>(N-y-1, M-x-1) = abs(sumReal) + abs(sumImag);
+
+
+
 		}
 	}
 
@@ -174,11 +184,12 @@ int main(int, char**)
 	{
 		for (int y = 0; y < DFTInverse.rows; y++)
 		{
-			salida.at<double>(y, x) = (salida.at<double>(y, x)*pow(-1.0, (double)x + y));
-			//printf(" %f\n ", salida.at<double>(y, x));
+			salida.at<double>(y, x) = DFTInverse.at<double>(y, x)*pow(-1.0, (double)x + y);
+			double tem = salida.at<double>(y, x);
 		}
 	}
-	salida.convertTo(salida2, CV_8U);
+
+	salida.convertTo(salida, CV_8U);
 
 	imshow("Original", original);
 	imshow("Modificada", modificada);
@@ -187,7 +198,7 @@ int main(int, char**)
 	//imshow("DFTImageRE", DFTImageRE);
 	//imshow("DFTImageIM", DFTImageIM);
 	imshow("DFTinvertida", DFTInverse);
-	imshow("OriginalProce", salida2);
+	imshow("OriginalProce", salida);
 	waitKey(0);
 	
 	return 0;
