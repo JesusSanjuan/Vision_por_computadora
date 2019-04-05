@@ -1,24 +1,27 @@
 #include "opencv2/opencv.hpp"
 #include "opencv2/highgui.hpp"
+#include <opencv2/core/core.hpp>
 #include "opencv2/highgui/highgui.hpp"
+#include <iostream>
 #include "opencv2/highgui/highgui_c.h"
 #include <stdlib.h>
 #include <math.h>
 #define M_PI 3.14159265358979323846
-
 using namespace cv;
+using namespace std;
 
 int main(int, char**)
 {
-	Mat modificada = cv::imread("unnamed2.jpg");	
-	cv::cvtColor(modificada, modificada, CV_BGR2GRAY);
+
+
+	Mat modificada = cv::imread("joker.jpg", IMREAD_GRAYSCALE);
 	Mat original = modificada.clone();
 	modificada.convertTo(modificada, CV_64F);
 	
 
 	int M = original.cols;//width
 	int N = original.rows;//high
-	printf("imagen tamaño width: %d  y high: %d \n", M, N);
+	printf("IMAGEN tamaño width: %d  y high: %d \n", M, N);
 
 
 	//paso 1:f(x,y)*(-1)^(x+y)
@@ -26,19 +29,20 @@ int main(int, char**)
 	{
 		for (int y = 0; y < N; y++)
 		{
-			modificada.at<double>(y, x) = modificada.at<double>(y, x)*pow(-1.0, (double)x + y);
+			modificada.at<double>(y, x) = modificada.at<double>(y, x)*pow(-1.0, (double)(x +y));
+			//printf(" %f\n ", modificada.at<double>(y, x));
 		}
 	}
 	
-	Mat modificada2;
-	modificada.convertTo(modificada2, CV_64F);
+	
+	//modificada.convertTo(modificada2, CV_64F);
 	// Mat modificada2= modificada.clone();
-	Mat DFT = modificada2.clone();
-	Mat DFTImageRE = modificada2.clone();
-	Mat DFTImageIM = modificada2.clone();
-	Mat DFTInverse = Mat(modificada2.rows, modificada2.cols, CV_64F, Scalar(0));
-	Mat salida = Mat(modificada2.rows, modificada2.cols, CV_8U);
-
+	Mat DFT = modificada.clone();
+	Mat DFTImageRE = modificada.clone();
+	Mat DFTImageIM = modificada.clone();
+	Mat DFTInverse = Mat(modificada.rows, modificada.cols, CV_64F, Scalar(0));
+	Mat salida = Mat(modificada.rows, modificada.cols, CV_64F);
+	Mat salida2 = Mat(modificada.rows, modificada.cols, CV_8U);
 	//Paso 2: Aplicamos la transformada
 
 	for (int x = 0; x < M; x++)
@@ -58,8 +62,8 @@ int main(int, char**)
 					double equiz = 2.0 * M_PI * divM;
 					double ye = 2.0 * M_PI * divN;
 
-					ak += modificada2.at<double>(k, j)*cos(equiz + ye);
-					bk += modificada2.at<double>(k, j)*(-1.0)*sin(equiz + ye);
+					ak += modificada.at<double>(k, j)*cos(equiz + ye);
+					bk += modificada.at<double>(k, j)*(-1.0)*sin(equiz + ye);
 
 				}
 			}
@@ -77,12 +81,13 @@ int main(int, char**)
 
 		}
 	}
-
-/*	//Creacion de mascara
 	printf("Termino Conversion de Tranformada de Furier");
+	/*
+//Creacion de mascara cilindrica
+	
 	Mat mascaraCilindrica = Mat(N, M, CV_64F);
 	int DUV;
-	int D0 = 48;
+	int D0 = 50;
 	for (int u = 0; u < M; u++)
 	{
 		for (int v = 0; v < N; v++)
@@ -97,9 +102,22 @@ int main(int, char**)
 				mascaraCilindrica.at<double>(v, u) = 0;
 			}
 		}
+	}*/
+	//Creacion de mascara gausiana
+	Mat mascaraCilindrica = Mat(N, M, CV_64F);
+	int DUV;
+	int D0 = 50;
+	for (int u = 0; u < M; u++)
+	{
+		for (int v = 0; v < N; v++)
+		{
+			DUV = sqrt(pow(u - (M / 2), 2) + pow(v - (N / 2), 2));			
+		    mascaraCilindrica.at<double>(v, u) = exp((-(pow(DUV,2)))/(2*pow(15,2)));
+			
+		}
 	}
 	
-	//Creacion de mascara
+	/*//Aplicacion de mascara
     for (int x = 0; x < M; x++)
 	{
 		for (int y = 0; y < N; y++)
@@ -143,32 +161,33 @@ int main(int, char**)
 				}
 			}			
 			double sumReal = akR - bkI;
-			//double sumImag = bkR + akI;
+			//double sumImag = bkR - akI;
 
-			//DFTInverse.at<double>(y, x) = abs(sumReal)+ abs(sumImag);
+			//DFTInverse.at<double>(y, x) = abs(sumReal)+abs(sumImag);
 			DFTInverse.at<double>(y, x) = abs(sumReal) ;
 		}
 	}
 
-	DFTInverse.convertTo(salida, CV_8U);
+	//DFTInverse.convertTo(salida, CV_8U);
 
 	for (int x = 0; x < DFTInverse.cols; x++)
 	{
 		for (int y = 0; y < DFTInverse.rows; y++)
 		{
-			salida.at<uchar>(y, x) = (salida.at<uchar>(y, x)*pow(-1.0, (double)x + y));
+			salida.at<double>(y, x) = (salida.at<double>(y, x)*pow(-1.0, (double)x + y));
+			//printf(" %f\n ", salida.at<double>(y, x));
 		}
 	}
+	salida.convertTo(salida2, CV_8U);
 
 	imshow("Original", original);
 	imshow("Modificada", modificada);
-	imshow("Modificada2", modificada2);
-	//imshow("Mascara", mascaraCilindrica);
+	imshow("Mascara", mascaraCilindrica);
 	imshow("DFT", DFT);
 	//imshow("DFTImageRE", DFTImageRE);
 	//imshow("DFTImageIM", DFTImageIM);
 	imshow("DFTinvertida", DFTInverse);
-	imshow("OriginalProce", salida);
+	imshow("OriginalProce", salida2);
 	waitKey(0);
 	
 	return 0;
