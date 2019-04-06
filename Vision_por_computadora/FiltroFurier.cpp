@@ -6,39 +6,40 @@
 #include "opencv2/highgui/highgui_c.h"
 #include <stdlib.h>
 #include <math.h>
+#include <iostream>
+#include <ctime>
+
 #define M_PI 3.14159265358979323846
+
 using namespace cv;
 using namespace std;
 
 int main(int, char**)
 {
 
-
-	Mat modificada = cv::imread("joker.jpg", IMREAD_GRAYSCALE);
+	unsigned t0, t1;
+	Mat modificada = cv::imread("image7.jpg", IMREAD_GRAYSCALE);
+	t0 = clock();		
 	Mat original = modificada.clone();
 	modificada.convertTo(modificada, CV_64F);
 	
 
 	int M = original.cols;//width
 	int N = original.rows;//high
-	printf("IMAGEN tamaño width: %d  y high: %d \n", M, N);
+	printf("Dimensiones de imagen width: %d  y high: %d \n", M, N);
 
 
-	//paso 1:f(x,y)*(-1)^(x+y)
+	printf("INICIO Paso 1 de 6. Elevacion \n");
 	for (int x = 0; x < M; x++)
 	{
 		for (int y = 0; y < N; y++)
 		{
 			modificada.at<double>(y, x) = modificada.at<double>(y, x)*pow(-1.0, (double)(x +y));
-			if (x == 0 && y == 0)
-			{
-				printf("1 %f\n ", modificada.at<double>(y, x));
-			}
-			//printf(" %f\n ", modificada.at<double>(y, x));
 		}
 	}
-	printf("Concluye paso1 \n");
+	printf("\tFINALIZA Paso 1 de 6. Elevacion \n");
 	
+	printf("INICIO Paso 2 de 6. Transformada de Furier\n");
 	//modificada.convertTo(modificada2, CV_64F);
 	// Mat modificada2= modificada.clone();
 	Mat DFT = modificada.clone();
@@ -85,7 +86,8 @@ int main(int, char**)
 
 		}
 	}
-	printf("Termino Conversion de Tranformada de Furier\n");
+	printf("\tFINALIZA Paso 2 de 6.  Transformada de Furier\n");
+	printf("INICIO Paso 3 de 6. Creacion de mascara cilindrica terminada\n");
 	/*
 //Creacion de mascara cilindrica
 	
@@ -110,19 +112,19 @@ int main(int, char**)
 	//Creacion de mascara gausiana
 	Mat mascaraCilindrica = Mat(N, M, CV_64F);
 	int DUV;
-	int D0 = 50;
+	int D0 = 10;
 	for (int u = 0; u < M; u++)
 	{
 		for (int v = 0; v < N; v++)
 		{
 			DUV = sqrt(pow(u - (M / 2), 2) + pow(v - (N / 2), 2));			
-		    mascaraCilindrica.at<double>(v, u) = exp((-(pow(DUV,2)))/(2*pow(15,2)));
+		    mascaraCilindrica.at<double>(v, u) = exp((-(pow(DUV,2)))/(2*pow(D0,2)));
 			
 		}
 	}
-	printf("Creacion de mascara terminada\n");
-
-	/*//Aplicacion de mascara
+	printf("\tFINALIZA Paso 3 de 6. Creacion de mascara cilindrica terminada\n");
+	printf("INICIA Paso 4 de 6. Aplicacion de mascara terminada\n");
+	//Aplicacion de mascara
     for (int x = 0; x < M; x++)
 	{
 		for (int y = 0; y < N; y++)
@@ -135,7 +137,9 @@ int main(int, char**)
 			DFTImageRE.at<double>(y, x) = valor1;
 			DFTImageIM.at<double>(y, x) = valor2;
 		}
-	}*/
+	}
+	printf("\tFINALIZA Paso 4 de 6. Aplicacion de mascara terminada\n");
+	printf("INICIA Paso 5 de 6. Inversa de transformada de furier correcta\n");
 	//Paso 3: Aplicamos la inversa
 	for (int x = 0; x < M; x++)
 	{
@@ -159,25 +163,21 @@ int main(int, char**)
 
 
 					akR += DFTImageRE.at<double>(k, j)*cos(equiz + ye);
-					bkR += DFTImageRE.at<double>(k, j)*(1.0)*sin(equiz + ye);
+					//bkR += DFTImageRE.at<double>(k, j)*(1.0)*sin(equiz + ye);
 
-					akI += DFTImageIM.at<double>(k, j)*cos(equiz + ye);
+					//akI += DFTImageIM.at<double>(k, j)*cos(equiz + ye);
 					bkI += DFTImageIM.at<double>(k, j)*(1.0)*sin(equiz + ye);
 				}
 			}
-
-
 			double sumReal = akR - bkI;
 			//double sumImag = bkR+akI;
 			//DFTInverse.at<double>(y, x) = abs(sumReal) + abs(sumImag);
 			DFTInverse.at<double>(y, x) = (sumReal);
 			//DFTInverse.at<double>(N-y-1, M-x-1) = abs(sumReal) + abs(sumImag);
-
-
-
 		}
 	}
-
+	printf("\tFINALIZA Paso 5 de 6. Inversa de transformada de furier correcta\n");
+	printf("INICIA Paso 6 de 6. Paso final elevacion\n");
 	//DFTInverse.convertTo(salida, CV_8U);
 
 	for (int x = 0; x < DFTInverse.cols; x++)
@@ -185,20 +185,26 @@ int main(int, char**)
 		for (int y = 0; y < DFTInverse.rows; y++)
 		{
 			salida.at<double>(y, x) = DFTInverse.at<double>(y, x)*pow(-1.0, (double)x + y);
-			double tem = salida.at<double>(y, x);
 		}
 	}
-
 	salida.convertTo(salida, CV_8U);
+	printf("\tFINALIZA Paso 6 de 6. Paso final elevacion\n");
+	
 
 	imshow("Original", original);
 	imshow("Modificada", modificada);
 	imshow("Mascara", mascaraCilindrica);
 	imshow("DFT", DFT);
-	//imshow("DFTImageRE", DFTImageRE);
-	//imshow("DFTImageIM", DFTImageIM);
+	imshow("DFTImageRE", DFTImageRE);
+	imshow("DFTImageIM", DFTImageIM);
 	imshow("DFTinvertida", DFTInverse);
 	imshow("OriginalProce", salida);
+	
+	t1 = clock();
+
+	double time = (double(t1 - t0) / CLOCKS_PER_SEC);
+	cout << "Tiempo de ejecucion: " << time << endl;
+
 	waitKey(0);
 	
 	return 0;
