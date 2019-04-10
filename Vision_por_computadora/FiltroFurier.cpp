@@ -18,7 +18,7 @@ int main(int, char**)
 {
 
 	unsigned t0, t1;
-	Mat modificada = cv::imread("image7.jpg", IMREAD_GRAYSCALE);
+	Mat modificada = cv::imread("image0.jpg", IMREAD_GRAYSCALE);
 	t0 = clock();		
 	Mat original = modificada.clone();
 	modificada.convertTo(modificada, CV_64F);
