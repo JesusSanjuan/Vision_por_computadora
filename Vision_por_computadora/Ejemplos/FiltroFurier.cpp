@@ -18,12 +18,13 @@ int main(int, char**)
 {
 
 	unsigned t0, t1;
+	unsigned t0a, t1a;
 	Mat modificada = cv::imread("image0.jpg", IMREAD_GRAYSCALE);
 	t0 = clock();
-	t0a = clock();	
+	t0a = clock();
 	Mat original = modificada.clone();
 	modificada.convertTo(modificada, CV_64F);
-	
+
 
 	int M = original.cols;//width
 	int N = original.rows;//high
@@ -35,11 +36,11 @@ int main(int, char**)
 	{
 		for (int y = 0; y < N; y++)
 		{
-			modificada.at<double>(y, x) = modificada.at<double>(y, x)*pow(-1.0, (double)(x +y));
+			modificada.at<double>(y, x) = modificada.at<double>(y, x)*pow(-1.0, (double)(x + y));
 		}
 	}
 	printf("\tFINALIZA Paso 1 de 6. Elevacion \n");
-	
+
 	printf("INICIO Paso 2 de 6. Transformada de Furier\n");
 	//modificada.convertTo(modificada2, CV_64F);
 	// Mat modificada2= modificada.clone();
@@ -89,11 +90,14 @@ int main(int, char**)
 	}
 	t1a = clock();
 	printf("\tFINALIZA Paso 2 de 6.  Transformada de Furier\n");
-	
+
+	double time2 = (double(t1a - t0a) / CLOCKS_PER_SEC);
+	cout << "Tiempo de ejecucion Furier: " << time2 << endl;
+
 	printf("INICIO Paso 3 de 6. Creacion de mascara cilindrica terminada\n");
 	/*
 //Creacion de mascara cilindrica
-	
+
 	Mat mascaraCilindrica = Mat(N, M, CV_64F);
 	int DUV;
 	int D0 = 50;
@@ -120,22 +124,22 @@ int main(int, char**)
 	{
 		for (int v = 0; v < N; v++)
 		{
-			DUV = sqrt(pow(u - (M / 2), 2) + pow(v - (N / 2), 2));			
-		    mascaraCilindrica.at<double>(v, u) = exp((-(pow(DUV,2)))/(2*pow(D0,2)));
-			
+			DUV = sqrt(pow(u - (M / 2), 2) + pow(v - (N / 2), 2));
+			mascaraCilindrica.at<double>(v, u) = exp((-(pow(DUV, 2))) / (2 * pow(D0, 2)));
+
 		}
 	}
 	printf("\tFINALIZA Paso 3 de 6. Creacion de mascara cilindrica terminada\n");
 	printf("INICIA Paso 4 de 6. Aplicacion de mascara terminada\n");
 	//Aplicacion de mascara
-    for (int x = 0; x < M; x++)
+	for (int x = 0; x < M; x++)
 	{
 		for (int y = 0; y < N; y++)
 		{
 			double intensidad = DFTImageRE.at<double>(y, x);
 			double intensidad2 = mascaraCilindrica.at<double>(y, x);
 			double intensidad3 = DFTImageIM.at<double>(y, x);
-			double valor1 = intensidad  * intensidad2;
+			double valor1 = intensidad * intensidad2;
 			double valor2 = intensidad3 * intensidad2;
 			DFTImageRE.at<double>(y, x) = valor1;
 			DFTImageIM.at<double>(y, x) = valor2;
@@ -192,7 +196,7 @@ int main(int, char**)
 	}
 	salida.convertTo(salida, CV_8U);
 	printf("\tFINALIZA Paso 6 de 6. Paso final elevacion\n");
-	
+
 
 	imshow("Original", original);
 	imshow("Modificada", modificada);
@@ -202,15 +206,14 @@ int main(int, char**)
 	imshow("DFTImageIM", DFTImageIM);
 	imshow("DFTinvertida", DFTInverse);
 	imshow("OriginalProce", salida);
-	
+
 	t1 = clock();
 
-	double time = (double(t1 - t0) / CLOCKS_PER_SEC);
-	double time2 = (double(t1a - t0a) / CLOCKS_PER_SEC);
+	double time = (double(t1 - t0) / CLOCKS_PER_SEC);	
 	cout << "Tiempo de ejecucion: " << time << endl;
-	cout << "Tiempo de ejecucion Furier: " << time2 << endl;
 	waitKey(0);
-	
+
 	return 0;
 
 }
+
