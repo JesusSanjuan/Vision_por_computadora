@@ -19,7 +19,8 @@ int main(int, char**)
 
 	unsigned t0, t1;
 	Mat modificada = cv::imread("image0.jpg", IMREAD_GRAYSCALE);
-	t0 = clock();		
+	t0 = clock();
+	t0a = clock();	
 	Mat original = modificada.clone();
 	modificada.convertTo(modificada, CV_64F);
 	
@@ -86,7 +87,9 @@ int main(int, char**)
 
 		}
 	}
+	t1a = clock();
 	printf("\tFINALIZA Paso 2 de 6.  Transformada de Furier\n");
+	
 	printf("INICIO Paso 3 de 6. Creacion de mascara cilindrica terminada\n");
 	/*
 //Creacion de mascara cilindrica
@@ -203,8 +206,9 @@ int main(int, char**)
 	t1 = clock();
 
 	double time = (double(t1 - t0) / CLOCKS_PER_SEC);
+	double time2 = (double(t1a - t0a) / CLOCKS_PER_SEC);
 	cout << "Tiempo de ejecucion: " << time << endl;
-
+	cout << "Tiempo de ejecucion Furier: " << time2 << endl;
 	waitKey(0);
 	
 	return 0;
