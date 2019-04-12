@@ -2,6 +2,7 @@
 #include "opencv2/highgui.hpp"
 #include <opencv2/core/core.hpp>
 #include "opencv2/highgui/highgui.hpp"
+#include <opencv2/core.hpp>
 #include <iostream>
 #include "opencv2/highgui/highgui_c.h"
 #include <stdlib.h>
@@ -17,7 +18,7 @@ using namespace std;
 int main(int argc, char ** argv)
 {
 	unsigned t0, t1;
-	Mat I = cv::imread("image0.jpg", IMREAD_GRAYSCALE);
+	Mat I = cv::imread("lena.jpg", IMREAD_GRAYSCALE);
 	t0 = clock();
 	if (I.empty()) {
 		cout << "Error opening image" << endl;
@@ -57,8 +58,29 @@ int main(int argc, char ** argv)
 	tmp.copyTo(q2);
 	normalize(magI, magI, 0, 1, NORM_MINMAX); // Transform the matrix with float values into a
 											// viewable image form (float between values 0 and 1).
+	cv::Mat inverseTransform;	
+/*	cv::dft(complexI, inverseTransform,  cv::DFT_REAL_OUTPUT | cv::DFT_INVERSE );
+	//inverseTransform.convertTo(inverseTransform, CV_8U);
+	normalize(inverseTransform, inverseTransform, 0, 1, NORM_MINMAX);
+/*	Mat inverseTransform;
+	dft(complexI, inverseTransform, DFT_INVERSE + DFT_REAL_OUTPUT);
+	inverseTransform.convertTo(inverseTransform, CV_8U);*/
+
+	//Mat inverseTransform2 = idft(complexI, inverseTransform,0,0);
+
+	//Mat inverseTransform_removenoise;
+	dft(complexI, inverseTransform, DFT_INVERSE | DFT_REAL_OUTPUT);
+	normalize(inverseTransform, inverseTransform, 0, 1, CV_MINMAX);
+	Mat final(inverseTransform, Rect(0, 0, I.cols, I.rows));
+	
+
 	imshow("Input Image", I);    // Show the result
 	imshow("spectrum magnitude", magI);
+	imshow("FINAL", final);
+	//imshow("Reconstructed", inverseTransform);
+	
+	
+
 	t1 = clock();
 
 	double time = (double(t1 - t0) / CLOCKS_PER_SEC);
