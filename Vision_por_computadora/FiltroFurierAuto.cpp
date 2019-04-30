@@ -1,93 +1,84 @@
 #include "opencv2/opencv.hpp"
 #include "opencv2/highgui.hpp"
-#include <opencv2/core/core.hpp>
 #include "opencv2/highgui/highgui.hpp"
-#include <opencv2/core.hpp>
-#include <iostream>
 #include "opencv2/highgui/highgui_c.h"
-#include <stdlib.h>
-#include <math.h>
-#include <iostream>
-#include <ctime>
-
-#define M_PI 3.14159265358979323846
-
 using namespace cv;
-using namespace std;
 
-int main(int argc, char ** argv)
+const int alpha_slider_max = 255;
+int alpha_slider=100;
+
+void on_trackbar(int, void*)
 {
-	unsigned t0, t1;
-	Mat I = cv::imread("lena.jpg", IMREAD_GRAYSCALE);
-	t0 = clock();
-	if (I.empty()) {
-		cout << "Error opening image" << endl;
-		return -1;
+	std::cout << "Barra 1: " << alpha_slider << std::endl;
+
+
+	Mat grayscale = cv::imread("image4a.jpg", IMREAD_GRAYSCALE);
+
+	Mat binaria = Mat(grayscale.rows, grayscale.cols, CV_8U);
+	Mat Dilatacion = Mat(grayscale.rows, grayscale.cols, CV_8U);
+
+	int rango1 = alpha_slider;
+
+	for (int x = 0; x < grayscale.cols; x++)
+	{
+		for (int y = 0; y < grayscale.rows; y++)
+		{
+			int intensidad = grayscale.at<uchar>(y, x);
+
+			if (intensidad >= rango1)
+			{
+				binaria.at<uchar>(y, x) = 1;
+			}
+			else
+			{
+				binaria.at<uchar>(y, x) = 0;
+			}
+		}
+	}
+	binaria.convertTo(binaria, CV_64F);
+
+     int p1, resu = 0; int tem1, tem2; int ancho = grayscale.cols; int alto = grayscale.rows;
+	int fC = 2, ff = 2; fC = fC - columna;  ff = ff - fila;
+	for (int j = fila; j < ancho - ff; j++)
+	{
+		for (int i = columna; i < alto - fC; i++)
+		{
+			pixel = I1.getPixel(i, j);
+			p1 = pixel.getBlue();
+			if (ElementoEs[fila][columna] == p1)
+			{
+				tem1 = j; tem2 = i;
+				for (int ii = 0; ii < 3; ii++)
+				{
+					for (int jj = 0; jj < 3; jj++)
+					{
+						resu = ElementoEs[ii][jj];
+						if (resu == 255)
+						{
+							tmp.setPixel(tem2 - columna, tem1 - fila, resu, resu, resu);
+						}tem2++;
+					}tem1++;    tem2 = i;
+				}
+			}
+		}
 	}
 
-	Mat padded;                            //expand input image to optimal size
-	int m = getOptimalDFTSize(I.rows);
-	int n = getOptimalDFTSize(I.cols); // on the border add zero values
-	copyMakeBorder(I, padded, 0, m - I.rows, 0, n - I.cols, BORDER_CONSTANT, Scalar::all(0));
-	Mat planes[] = { Mat_<float>(padded), Mat::zeros(padded.size(), CV_32F) };
-	Mat complexI;
-	merge(planes, 2, complexI);         // Add to the expanded another plane with zeros
-	dft(complexI, complexI);            // this way the result may fit in the source matrix
-	// compute the magnitude and switch to logarithmic scale
-	// => log(1 + sqrt(Re(DFT(I))^2 + Im(DFT(I))^2))
-	split(complexI, planes);                   // planes[0] = Re(DFT(I), planes[1] = Im(DFT(I))
-	magnitude(planes[0], planes[1], planes[0]);// planes[0] = magnitude
-	Mat magI = planes[0];
-	magI += Scalar::all(1);                    // switch to logarithmic scale
-	log(magI, magI);
-	// crop the spectrum, if it has an odd number of rows or columns
-	magI = magI(Rect(0, 0, magI.cols & -2, magI.rows & -2));
-	// rearrange the quadrants of Fourier image  so that the origin is at the image center
-	int cx = magI.cols / 2;
-	int cy = magI.rows / 2;
-	Mat q0(magI, Rect(0, 0, cx, cy));   // Top-Left - Create a ROI per quadrant
-	Mat q1(magI, Rect(cx, 0, cx, cy));  // Top-Right
-	Mat q2(magI, Rect(0, cy, cx, cy));  // Bottom-Left
-	Mat q3(magI, Rect(cx, cy, cx, cy)); // Bottom-Right
-	Mat tmp;                           // swap quadrants (Top-Left with Bottom-Right)
-	q0.copyTo(tmp);
-	q3.copyTo(q0);
-	tmp.copyTo(q3);
-	q1.copyTo(tmp);                    // swap quadrant (Top-Right with Bottom-Left)
-	q2.copyTo(q1);
-	tmp.copyTo(q2);
-	normalize(magI, magI, 0, 1, NORM_MINMAX); // Transform the matrix with float values into a
-											// viewable image form (float between values 0 and 1).
-	cv::Mat inverseTransform;	
-/*	cv::dft(complexI, inverseTransform,  cv::DFT_REAL_OUTPUT | cv::DFT_INVERSE );
-	//inverseTransform.convertTo(inverseTransform, CV_8U);
-	normalize(inverseTransform, inverseTransform, 0, 1, NORM_MINMAX);
-/*	Mat inverseTransform;
-	dft(complexI, inverseTransform, DFT_INVERSE + DFT_REAL_OUTPUT);
-	inverseTransform.convertTo(inverseTransform, CV_8U);*/
+	imshow("grayscale", grayscale);
+	imshow("Binaria", binaria);
+	imshow("Dilatacion", Dilatacion);
+}
 
-	//Mat inverseTransform2 = idft(complexI, inverseTransform,0,0);
-
-	//Mat inverseTransform_removenoise;
-	dft(complexI, inverseTransform, DFT_INVERSE | DFT_REAL_OUTPUT);
-	normalize(inverseTransform, inverseTransform, 0, 1, CV_MINMAX);
-	Mat final(inverseTransform, Rect(0, 0, I.cols, I.rows));
+int main(int, char**)
+{
+	namedWindow("grayscale", 1);
+	namedWindow("Binaria", 1);
+	namedWindow("Dilatacion", 1);
 	
-
-	imshow("Input Image", I);    // Show the result
-	imshow("spectrum magnitude", magI);
-	imshow("FINAL", final);
-	//imshow("Reconstructed", inverseTransform);
-	
-	
-
-	t1 = clock();
-
-	double time = (double(t1 - t0) / CLOCKS_PER_SEC);
-	cout << "Tiempo de ejecucion: " << time << endl;
-
+	createTrackbar("Rango 1", "grayscale", &alpha_slider, alpha_slider_max, on_trackbar );
+		
 	waitKey(0);
-	
-	return 0;
+
+    return 0;
 
 }
+
