@@ -7,6 +7,10 @@ using namespace cv;
 const int alpha_slider_max = 255;
 int alpha_slider=100;
 
+int Mascara[3][3] = { { 0,  1,  0},
+					  { 1,  1,  1}, /* los espacios y saltos de líneas no son tomados en cuenta */
+					  { 0,  1,  0} };
+
 void on_trackbar(int, void*)
 {
 	std::cout << "Barra 1: " << alpha_slider << std::endl;
@@ -37,31 +41,32 @@ void on_trackbar(int, void*)
 	}
 	binaria.convertTo(binaria, CV_64F);
 
-     int p1, resu = 0; int tem1, tem2; int ancho = grayscale.cols; int alto = grayscale.rows;
+    int p1, resu = 0; int tem1, tem2; int ancho = grayscale.cols; int alto = grayscale.rows; int columna = 1; int fila = 1;
 	int fC = 2, ff = 2; fC = fC - columna;  ff = ff - fila;
+	int pixel;
 	for (int j = fila; j < ancho - ff; j++)
 	{
 		for (int i = columna; i < alto - fC; i++)
 		{
-			pixel = I1.getPixel(i, j);
-			p1 = pixel.getBlue();
-			if (ElementoEs[fila][columna] == p1)
+			p1 = binaria.at<uchar>(j, i);
+			if (Mascara[fila][columna] == p1)
 			{
 				tem1 = j; tem2 = i;
 				for (int ii = 0; ii < 3; ii++)
 				{
 					for (int jj = 0; jj < 3; jj++)
 					{
-						resu = ElementoEs[ii][jj];
-						if (resu == 255)
+						resu = Mascara[ii][jj];
+						if (resu == 1)
 						{
-							tmp.setPixel(tem2 - columna, tem1 - fila, resu, resu, resu);
+							Dilatacion.at<uchar>(tem2 - columna, tem1 - fila) = resu;
 						}tem2++;
 					}tem1++;    tem2 = i;
 				}
 			}
 		}
 	}
+	Dilatacion.convertTo(Dilatacion, CV_64F);
 
 	imshow("grayscale", grayscale);
 	imshow("Binaria", binaria);
