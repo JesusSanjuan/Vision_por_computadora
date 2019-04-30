@@ -16,7 +16,7 @@ void on_trackbar(int, void*)
 	std::cout << "Barra 1: " << alpha_slider << std::endl;
 
 
-	Mat grayscale = cv::imread("image1.jpg", IMREAD_GRAYSCALE);
+	Mat grayscale = cv::imread("Captura.jpg", IMREAD_GRAYSCALE);
 
 	Mat binaria = Mat(grayscale.rows, grayscale.cols, CV_8U);
 	Mat Dilatacion = Mat(grayscale.rows, grayscale.cols, CV_8U);
@@ -29,7 +29,7 @@ void on_trackbar(int, void*)
 		{
 			int intensidad = grayscale.at<uchar>(y, x);
 
-			if (intensidad >= rango1)
+			if (intensidad <= rango1)
 			{
 				binaria.at<uchar>(y, x) = 1;
 			}
@@ -40,7 +40,7 @@ void on_trackbar(int, void*)
 		}
 	}
 	binaria.convertTo(binaria, CV_64F);
-	double p1 = 0; int resu = 0; int tem1, tem2; int ancho = grayscale.cols; int alto = grayscale.rows; 
+	/*double p1 = 0; int resu = 0; int tem1, tem2; int ancho = grayscale.cols; int alto = grayscale.rows; 
 	for (int i = 1; i < ancho - 1; i++)
 	{
 		for (int j = 1; j < alto - 1; j++)
@@ -63,7 +63,7 @@ void on_trackbar(int, void*)
 			}
 		}
 	}
-	Dilatacion.convertTo(Dilatacion, CV_64F);
+	Dilatacion.convertTo(Dilatacion, CV_64F);*/
 
 	imshow("grayscale", grayscale);
 	imshow("Binaria", binaria);
