@@ -40,15 +40,13 @@ void on_trackbar(int, void*)
 		}
 	}
 	binaria.convertTo(binaria, CV_64F);
-
-	double p1 = 0; int resu = 0; int tem1, tem2; int ancho = grayscale.cols; int alto = grayscale.rows; //int columna = 1; int fila = 1;
-	//int fC = 1, ff = 1;// fC = fC - columna;  ff = ff - fila;
+	double p1 = 0; int resu = 0; int tem1, tem2; int ancho = grayscale.cols; int alto = grayscale.rows; 
 	for (int i = 1; i < ancho - 1; i++)
 	{
 		for (int j = 1; j < alto - 1; j++)
 		{
 			p1 = binaria.at<double>(j, i);
-			if (Mascara[1][1] == p1)
+			if (Mascara[0][1] == p1)
 			{
 				tem1 = j; tem2 = i;
 				for (int ii = 0; ii < 3; ii++)
