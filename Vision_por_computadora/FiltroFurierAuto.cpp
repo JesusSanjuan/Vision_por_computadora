@@ -16,7 +16,7 @@ void on_trackbar(int, void*)
 	std::cout << "Barra 1: " << alpha_slider << std::endl;
 
 
-	Mat grayscale = cv::imread("image.jpg", IMREAD_GRAYSCALE);
+	Mat grayscale = cv::imread("image1.jpg", IMREAD_GRAYSCALE);
 
 	Mat binaria = Mat(grayscale.rows, grayscale.cols, CV_8U);
 	Mat Dilatacion = Mat(grayscale.rows, grayscale.cols, CV_8U);
@@ -46,7 +46,7 @@ void on_trackbar(int, void*)
 		for (int j = 1; j < alto - 1; j++)
 		{
 			p1 = binaria.at<double>(j, i);
-			if (Mascara[0][1] == p1)
+			if (0 == p1)
 			{
 				tem1 = j; tem2 = i;
 				for (int ii = 0; ii < 3; ii++)
