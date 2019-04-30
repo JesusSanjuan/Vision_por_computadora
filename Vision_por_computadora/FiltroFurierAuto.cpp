@@ -16,7 +16,7 @@ void on_trackbar(int, void*)
 	std::cout << "Barra 1: " << alpha_slider << std::endl;
 
 
-	Mat grayscale = cv::imread("image4a.jpg", IMREAD_GRAYSCALE);
+	Mat grayscale = cv::imread("image.jpg", IMREAD_GRAYSCALE);
 
 	Mat binaria = Mat(grayscale.rows, grayscale.cols, CV_8U);
 	Mat Dilatacion = Mat(grayscale.rows, grayscale.cols, CV_8U);
@@ -41,15 +41,14 @@ void on_trackbar(int, void*)
 	}
 	binaria.convertTo(binaria, CV_64F);
 
-    int p1, resu = 0; int tem1, tem2; int ancho = grayscale.cols; int alto = grayscale.rows; int columna = 1; int fila = 1;
-	int fC = 2, ff = 2; fC = fC - columna;  ff = ff - fila;
-	int pixel;
-	for (int j = fila; j < ancho - ff; j++)
+	double p1 = 0; int resu = 0; int tem1, tem2; int ancho = grayscale.cols; int alto = grayscale.rows; //int columna = 1; int fila = 1;
+	//int fC = 1, ff = 1;// fC = fC - columna;  ff = ff - fila;
+	for (int i = 1; i < ancho - 1; i++)
 	{
-		for (int i = columna; i < alto - fC; i++)
+		for (int j = 1; j < alto - 1; j++)
 		{
-			p1 = binaria.at<uchar>(j, i);
-			if (Mascara[fila][columna] == p1)
+			p1 = binaria.at<double>(j, i);
+			if (Mascara[1][1] == p1)
 			{
 				tem1 = j; tem2 = i;
 				for (int ii = 0; ii < 3; ii++)
@@ -59,7 +58,7 @@ void on_trackbar(int, void*)
 						resu = Mascara[ii][jj];
 						if (resu == 1)
 						{
-							Dilatacion.at<uchar>(tem2 - columna, tem1 - fila) = resu;
+							Dilatacion.at<uchar>(tem1 - 1, tem2 - 1) = resu;
 						}tem2++;
 					}tem1++;    tem2 = i;
 				}
