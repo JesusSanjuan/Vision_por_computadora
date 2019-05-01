@@ -5,7 +5,7 @@
 using namespace cv;
 
 const int alpha_slider_max = 255;
-int alpha_slider=100;
+int alpha_slider=2;
 
 int Mascara[3][3] = { { 0,  1,  0},
 					  { 1,  1,  1}, /* los espacios y saltos de líneas no son tomados en cuenta */
@@ -28,13 +28,15 @@ void on_trackbar(int, void*)
 		for (int y = 0; y < grayscale.rows; y++)
 		{
 			int intensidad = grayscale.at<uchar>(y, x);
-
+			
 			if (intensidad <= rango1)
 			{
+				//std::cout << "Intensidad: " << intensidad << " <= Rango " << rango1 << std::endl;
 				binaria.at<uchar>(y, x) = 1;
 			}
 			else
 			{
+				
 				binaria.at<uchar>(y, x) = 0;
 			}
 		}
