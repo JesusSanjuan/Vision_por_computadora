@@ -5,7 +5,7 @@
 using namespace cv;
 
 const int alpha_slider_max = 255;
-int alpha_slider=100;
+int alpha_slider = 100;
 VideoCapture cap(0);
 
 int Mascara[3][3] = { { 0,  0,  0},
@@ -15,7 +15,7 @@ int Mascara[3][3] = { { 0,  0,  0},
 void on_trackbar(int, void*)
 {
 
-	
+
 }
 
 int main(int, char**)
@@ -36,7 +36,7 @@ int main(int, char**)
 	for (;;)
 	{
 		Mat frame;
-		cap >> frame; 
+		cap >> frame;
 
 		Mat grayscale;
 		cvtColor(frame, grayscale, CV_RGB2GRAY);
@@ -50,7 +50,7 @@ int main(int, char**)
 			{
 				int intensidad = grayscale.at<uchar>(y, x);
 
-				if (intensidad >= alpha_slider)
+				if (intensidad <= alpha_slider)
 				{
 					binaria.at<uchar>(y, x) = 1;
 				}
@@ -95,6 +95,6 @@ int main(int, char**)
 		waitKey(30);
 	}
 
-    return 0;
+	return 0;
 }
 

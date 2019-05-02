@@ -5,7 +5,7 @@
 using namespace cv;
 
 const int alpha_slider_max = 255;
-int alpha_slider=100;
+int alpha_slider=128;
 
 int Mascara[3][3] = { { 0,  0,  0},
 					  { 0,  0,  0}, /* los espacios y saltos de líneas no son tomados en cuenta */
@@ -15,7 +15,7 @@ void on_trackbar(int, void*)
 {
 	std::cout << "Barra 1: " << alpha_slider << std::endl;
 
-	Mat grayscale = cv::imread("image4a.jpg", IMREAD_GRAYSCALE);
+	Mat grayscale = cv::imread("Captura.jpg", IMREAD_GRAYSCALE);
 	Mat binaria = Mat(grayscale.rows, grayscale.cols, CV_8U);
 	Mat Dilatacion = Mat(grayscale.rows, grayscale.cols, CV_64F);
 	

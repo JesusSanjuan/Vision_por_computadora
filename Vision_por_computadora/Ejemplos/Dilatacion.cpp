@@ -5,7 +5,7 @@
 using namespace cv;
 
 const int alpha_slider_max = 255;
-int alpha_slider=100;
+int alpha_slider=128;
 
 int Mascara[3][3] = { { 0,  1,  0},
 					  { 1,  1,  1}, /* los espacios y saltos de líneas no son tomados en cuenta */
