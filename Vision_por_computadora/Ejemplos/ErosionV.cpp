@@ -12,12 +12,6 @@ int Mascara[3][3] = { { 0,  0,  0},
 					  { 0,  0,  0}, /* los espacios y saltos de líneas no son tomados en cuenta */
 					  { 0,  0,  0} };
 
-void on_trackbar(int, void*)
-{
-
-
-}
-
 int main(int, char**)
 {
 	VideoCapture cap(0); //Abrimos la camara default
