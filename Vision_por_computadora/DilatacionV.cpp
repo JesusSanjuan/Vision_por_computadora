@@ -20,7 +20,7 @@ int main(int, char**)
 
 	namedWindow("grayscale", WINDOW_AUTOSIZE);
 	namedWindow("Binaria", WINDOW_AUTOSIZE);
-	namedWindow("Erosion", WINDOW_AUTOSIZE);
+	namedWindow("Dilatacion", WINDOW_AUTOSIZE);
 
 	Mat frame;
 	cap >> frame; //get a new frame from camera	
@@ -83,7 +83,7 @@ int main(int, char**)
 		}
 		imshow("grayscale", grayscale);
 		imshow("Binaria", binaria);
-		imshow("Erosion", Dilatacion);
+		imshow("Dilatacion", Dilatacion);
 
 		waitKey(30);
 	}
