@@ -15,7 +15,7 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="DilatacionV.cpp">
+    <ClCompile Include="Clossing.cpp">
       <Filter>Archivos de origen</Filter>
     </ClCompile>
   </ItemGroup>
