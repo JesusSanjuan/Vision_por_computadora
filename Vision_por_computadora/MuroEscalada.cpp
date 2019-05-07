@@ -17,14 +17,21 @@ int Mascara2[3][3] = { { 0,  0,  0},
 					  { 0,  0,  0}, /* los espacios y saltos de líneas no son tomados en cuenta */
 					  { 0,  0,  0} };
 
-int MascaraB[3][3] =      { { 0,  1,  0},
-						  { 1, -4,  1}, /* los espacios y saltos de líneas no son tomados en cuenta */
-						  { 0,  1,  0} };
+int MascaraB[3][3] =      { { 1,  1,  1},
+						  { 1, -8,  1}, /* los espacios y saltos de líneas no son tomados en cuenta */
+						  { 1,  1,  1} };
 void on_trackbar(int, void*)
 {
+
+	Mat src, dst;
+
 	std::cout << "Barra 1: " << alpha_slider << std::endl;
 	Mat grayscale = cv::imread("imagen.jpg", IMREAD_GRAYSCALE);
 	imshow("grayscale", grayscale);
+
+	equalizeHist(grayscale, grayscale);
+	imshow("Ecualizada", grayscale);
+
 
 	Mat borde = Mat(grayscale.rows, grayscale.cols, CV_8U);
 	int tem1, tem2, resultado1, resultado2;
@@ -141,6 +148,7 @@ int main(int, char**)
 		namedWindow("Dilatacion", 1);
 		namedWindow("Binaria", 1);
 		namedWindow("MascaraBorde", 1);
+		namedWindow("Ecualizada", 1);
 		namedWindow("grayscale", 1);
 
 		createTrackbar("Rango 1", "grayscale", &alpha_slider, alpha_slider_max, on_trackbar);
