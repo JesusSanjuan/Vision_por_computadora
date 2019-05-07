@@ -17,7 +17,7 @@ void on_trackbar(int, void*)
 
 	Mat grayscale = cv::imread("Captura.jpg", IMREAD_GRAYSCALE);
 	Mat binaria = Mat(grayscale.rows, grayscale.cols, CV_8U);
-	Mat Dilatacion = Mat(grayscale.rows, grayscale.cols, CV_64F);
+	Mat Erosion = Mat(grayscale.rows, grayscale.cols, CV_64F);
 	
 	int rango1 = alpha_slider;
 
@@ -39,7 +39,7 @@ void on_trackbar(int, void*)
 	}
 	binaria.convertTo(binaria, CV_64F);
 
-	Dilatacion = binaria.clone();
+	Erosion = binaria.clone();
 	double p1 = 0; int resu = 0; int tem1, tem2; 
 	for (int i = 1; i < grayscale.cols - 1; i++)
 	{
@@ -57,7 +57,7 @@ void on_trackbar(int, void*)
 						//if (resu == 1)
 						//{
 							int x = tem1 - 1; int y = tem2 - 1;
-							Dilatacion.at<double>(y, x) = resu;
+							Erosion.at<double>(y, x) = resu;
 						//}
 					    tem2++;
 					}tem1++;    tem2 = j;
@@ -67,7 +67,7 @@ void on_trackbar(int, void*)
 	}
 	imshow("grayscale", grayscale);
 	imshow("Binaria", binaria);
-	imshow("Erosion", Dilatacion);
+	imshow("Erosion", Erosion);
 }
 
 int main(int, char**)
