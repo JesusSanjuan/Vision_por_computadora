@@ -18,6 +18,7 @@ int main(int, char**)
 {
 	//namedWindow("grayscale", CV_WINDOW_NORMAL);
 	namedWindow("DiferenciaT", CV_WINDOW_NORMAL);
+	namedWindow("DiferenciaColor", CV_WINDOW_NORMAL);
 	namedWindow("Suavisado", CV_WINDOW_NORMAL);
 	namedWindow("Result window", CV_WINDOW_NORMAL);
 	/*namedWindow("Suavisado", CV_WINDOW_NORMAL);
@@ -29,14 +30,20 @@ int main(int, char**)
 	Mat dst;
 
 	Mat grayscale = cv::imread("07a.jpg", IMREAD_GRAYSCALE);
+	Mat color = cv::imread("07a.jpg");
 	//equalizeHist(grayscale, grayscale);
 
 	Mat grayscale2 = cv::imread("07b.jpg", IMREAD_GRAYSCALE);
+	Mat color2 = cv::imread("07b.jpg");
 	//equalizeHist(grayscale2, grayscale2);
 
 	Mat diff_total;
 	absdiff(grayscale, grayscale2, diff_total);
 	imshow("DiferenciaT", diff_total);
+
+	Mat diff_total_color;
+	absdiff(color2, color, diff_total_color);
+	imshow("DiferenciaColor", diff_total_color);
 
 	diff_total.convertTo(diff_total, -1, 0.5, 0);
 
