@@ -59,6 +59,7 @@ int main(int, char**)
 	vector<Vec4i> hierarchy;
 	vector<vector<Point> > contours;
 	RNG rng(12345);
+
 	findContours(blur, contours, hierarchy, CV_RETR_TREE, CV_CHAIN_APPROX_SIMPLE, Point(0, 0));
 
 	Mat drawing = Mat::zeros(grayscale2.size(), CV_8UC3);
@@ -80,22 +81,20 @@ int main(int, char**)
 			morphologyEx(blur, morpologica, MORPH_BLACKHAT, element, Point(-1, -1), 2);
 			imshow("Morfologica", morpologica);*/
 
-
-			/*Mat Threshold = Mat(grayscale.rows, grayscale.cols, CV_8U);
+		/*	Mat Threshold = Mat(grayscale.rows, grayscale.cols, CV_8U);
 			adaptiveThreshold(blur, Threshold, 128, ADAPTIVE_THRESH_GAUSSIAN_C, THRESH_BINARY_INV, 7, 2);
 			imshow("Threshold", Threshold);*/
 
 
-			/*Mat borde = Mat(grayscale.rows, grayscale.cols, CV_8U);
+		/*	Mat borde = Mat(grayscale.rows, grayscale.cols, CV_8U);
 			Canny(blur, borde, 50, 150);
 			imshow("MascaraBorde", borde);*/
 
-
-			/*	Mat morpologica = Mat(grayscale.rows, grayscale.cols, CV_8U);
-				int morph_size = 4;
-				Mat element = getStructuringElement(MORPH_RECT, Size(2 * morph_size + 1, 2 * morph_size + 1), Point(morph_size, morph_size));
-				morphologyEx(Threshold, morpologica, MORPH_GRADIENT, element, Point(-1, -1), 1);
-				imshow("Morfologica", morpologica);*/
+		/*	Mat morpologica = Mat(grayscale.rows, grayscale.cols, CV_8U);
+			int morph_size = 4;
+			Mat element = getStructuringElement(MORPH_RECT, Size(2 * morph_size + 1, 2 * morph_size + 1), Point(morph_size, morph_size));
+			morphologyEx(Threshold, morpologica, MORPH_GRADIENT, element, Point(-1, -1), 1);
+			imshow("Morfologica", morpologica);*/
 
 	waitKey(0);
 	return 0;
